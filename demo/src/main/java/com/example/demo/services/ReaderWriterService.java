@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ReaderWriterService {
 
-    public List<Product> readFile(String path) throws JsonProcessingException, JAXBException;
-
+    List<Product> readFile(String path) throws JsonProcessingException, JAXBException;
+    String jsonFormat() throws JAXBException, JsonProcessingException;
+    String xmlFormat() throws JAXBException, JsonProcessingException;
 }
