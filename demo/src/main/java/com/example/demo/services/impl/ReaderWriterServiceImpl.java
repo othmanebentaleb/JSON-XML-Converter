@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 public class ReaderWriterServiceImpl implements ReaderWriterService {
     @Override
     public List<Product> readFile(String path) throws JsonProcessingException, JAXBException {
-        path = "C:\\Users\\33637\\Desktop\\Projects\\test.txt";
+        path = "C:\\Users\\X183537\\Desktop\\Test_Technique\\test.txt";
         List<String> list = new ArrayList<>();
         List<Product> result = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(path))){
@@ -32,22 +32,30 @@ public class ReaderWriterServiceImpl implements ReaderWriterService {
         catch (IOException e) {
             e.printStackTrace();
         }
-       list.forEach(System.out::println);
-       result.forEach(System.out::println);
-       // JSON Mapping
-       ObjectMapper objectMapper = new ObjectMapper();
-       objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-       String productListToJSON = objectMapper.writeValueAsString(result);
-       System.out.println(productListToJSON);
+        
+       return result;
+    }
 
-       //XML Mapping
+    @Override
+    public String jsonFormat() throws JAXBException, JsonProcessingException {
+        List<Product> result = this.readFile("");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        return objectMapper.writeValueAsString(result);
+    }
+
+    @Override
+    public String xmlFormat() throws JAXBException, JsonProcessingException {
+        List<Product> result = this.readFile("");
         Products products = new Products(result);
         JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-        jaxbMarshaller.marshal(products, System.out);
-       return result;
+        StringWriter sw = new StringWriter();
+        jaxbMarshaller.marshal(products, sw);
+
+        return sw.toString();
     }
 
     private Product toProduct(String s) {
