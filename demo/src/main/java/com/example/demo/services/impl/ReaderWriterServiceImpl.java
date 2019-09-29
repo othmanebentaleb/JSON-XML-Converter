@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,15 +25,16 @@ import java.util.stream.Stream;
 @Service
 public class ReaderWriterServiceImpl implements ReaderWriterService {
     @Override
-    public List<Product> readFile(String path) throws JsonProcessingException, JAXBException {
-        path = "C:\\Users\\33637\\Desktop\\Projects\\test.txt";
-        List<String> list = new ArrayList<>();
+    public List<Product> readFile(String path) {
+        List<String> list;
         List<Product> result = new ArrayList<>();
-        try (Stream<String> stream = Files.lines(Paths.get(path))){
+        try {
+            URI uri = getClass().getClassLoader().getResource("test.txt").toURI();
+            Stream<String> stream = Files.lines(Paths.get(uri));
             list = stream.collect(Collectors.toList());
             result = list.stream().map(this::toProduct).collect(Collectors.toList());
         }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
         
@@ -40,7 +42,7 @@ public class ReaderWriterServiceImpl implements ReaderWriterService {
     }
 
     @Override
-    public String jsonFormat() throws JAXBException, JsonProcessingException {
+    public String jsonFormat() throws JsonProcessingException {
         List<Product> result = this.readFile("");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -48,7 +50,7 @@ public class ReaderWriterServiceImpl implements ReaderWriterService {
     }
 
     @Override
-    public String xmlFormat() throws JAXBException, JsonProcessingException {
+    public String xmlFormat() throws JAXBException {
         List<Product> result = this.readFile("");
         Products products = new Products(result);
         JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
