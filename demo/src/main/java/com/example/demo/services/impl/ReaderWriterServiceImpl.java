@@ -6,11 +6,13 @@ import com.example.demo.services.ReaderWriterService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,10 +21,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class ReaderWriterServiceImpl implements ReaderWriterService {
     @Override
     public List<Product> readFile(String path) throws JsonProcessingException, JAXBException {
-        path = "C:\\Users\\X183537\\Desktop\\Test_Technique\\test.txt";
+        path = "C:\\Users\\33637\\Desktop\\Projects\\test.txt";
         List<String> list = new ArrayList<>();
         List<Product> result = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(path))){

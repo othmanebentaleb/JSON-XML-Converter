@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.xml.bind.JAXBException;
 
 @RestController
-@CrossOrigin("http://localhost:4300")
+@CrossOrigin("http://localhost:4200")
 public class ReaderWriterController {
 
     @Autowired
